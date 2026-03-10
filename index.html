@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zovo Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F5F5F7;
+  --white: #FFFFFF;
+  --text: #1D1D1F;
+  --text-2: #424245;
+  --text-3: #86868B;
+  --text-4: #AEAEB2;
+  --border: #D2D2D7;
+  --border-light: #E8E8ED;
+  --green-bold: #34C759;
+  --green-bg: #E8FAF0;
+  --green-text: #1A7A34;
+  --blue-bold: #007AFF;
+  --blue-bg: #E5F1FF;
+  --blue-text: #003D80;
+  --orange-bold: #FF9500;
+  --orange-bg: #FFF4E5;
+  --orange-text: #804A00;
+  --red-bold: #FF3B30;
+  --red-bg: #FFEBEA;
+  --red-text: #801D18;
+  --purple-bold: #AF52DE;
+  --purple-bg: #F5EAFC;
+  --purple-text: #5A2970;
+  --cyan-bold: #32ADE6;
+  --cyan-bg: #E6F5FC;
+  --cyan-text: #195773;
+  --gray-bg: #F2F2F7;
+  --gray-text: #636366;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 2px 8px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+  --radius: 14px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page container */
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 24px 120px;
+}
+
+/* Header */
+.hero {
+  text-align: center;
+  padding: 48px 0 40px;
+}
+
+.hero-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: var(--blue-bold);
+  margin-bottom: 8px;
+}
+
+.hero h1 {
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.hero .date {
+  font-size: 14px;
+  color: var(--text-3);
+}
+
+/* Stats ribbon */
+.stats-ribbon {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 32px 0 40px;
+}
+
+.stat-pill {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 20px 16px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+.stat-pill .val {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--text);
+}
+
+.stat-pill .label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-3);
+  margin-top: 2px;
+  letter-spacing: 0.3px;
+}
+
+/* Global progress */
+.global-progress {
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.global-progress .bar-wrap {
+  flex: 1;
+  background: var(--bg);
+  border-radius: 6px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.global-progress .bar-fill {
+  height: 100%;
+  background: var(--green-bold);
+  border-radius: 6px;
+  transition: width 0.4s ease;
+}
+
+.global-progress .bar-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-3);
+  white-space: nowrap;
+  min-width: 90px;
+  text-align: right;
+}
+
+/* Category */
+.category {
+  margin-bottom: 20px;
+}
+
+.cat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  overflow: hidden;
+  transition: box-shadow 0.2s;
+}
+
+.cat-card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cat-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 24px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+.cat-header:hover {
+  background: rgba(0,0,0,0.015);
+}
+
+.cat-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.cat-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cat-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.2px;
+}
+
+.cat-subtitle {
+  font-size: 12px;
+  color: var(--text-3);
+  margin-top: 1px;
+}
+
+.cat-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 100px;
+  letter-spacing: 0.2px;
+}
+
+.cat-progress {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--text-4);
+  min-width: 36px;
+  text-align: right;
+}
+
+.cat-chevron {
+  color: var(--text-4);
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+
+.cat-card.open .cat-chevron {
+  transform: rotate(90deg);
+}
+
+/* Task list */
+.task-list {
+  border-top: 1px solid var(--border-light);
+  display: none;
+}
+
+.cat-card.open .task-list {
+  display: block;
+}
+
+.task {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.1s;
+}
+
+.task:last-child {
+  border-bottom: none;
+}
+
+.task:hover {
+  background: rgba(0,0,0,0.01);
+}
+
+.task.checked {
+  opacity: 0.35;
+}
+
+.task.checked .t-title {
+  text-decoration: line-through;
+}
+
+.task input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  accent-color: var(--green-bold);
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.t-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.t-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 2px;
+  line-height: 1.4;
+}
+
+.t-detail {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.55;
+}
+
+.t-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.t-priority {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.t-rating {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-4);
+}
+
+.t-status {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+
+/* Priority colors */
+.pri-critical { background: var(--red-bg); color: var(--red-text); }
+.pri-high { background: var(--orange-bg); color: var(--orange-text); }
+.pri-medium { background: var(--blue-bg); color: var(--blue-text); }
+.pri-low { background: var(--gray-bg); color: var(--gray-text); }
+
+/* Status colors */
+.st-fleet { background: var(--purple-bg); color: var(--purple-text); }
+.st-wait { background: var(--orange-bg); color: var(--orange-text); }
+.st-after { background: var(--gray-bg); color: var(--gray-text); }
+
+/* Category theme colors */
+.theme-green .cat-icon { background: var(--green-bg); }
+.theme-green .cat-badge { background: var(--green-bg); color: var(--green-text); }
+.theme-purple .cat-icon { background: var(--purple-bg); }
+.theme-purple .cat-badge { background: var(--purple-bg); color: var(--purple-text); }
+.theme-blue .cat-icon { background: var(--blue-bg); }
+.theme-blue .cat-badge { background: var(--blue-bg); color: var(--blue-text); }
+.theme-orange .cat-icon { background: var(--orange-bg); }
+.theme-orange .cat-badge { background: var(--orange-bg); color: var(--orange-text); }
+.theme-cyan .cat-icon { background: var(--cyan-bg); }
+.theme-cyan .cat-badge { background: var(--cyan-bg); color: var(--cyan-text); }
+.theme-gray .cat-icon { background: var(--gray-bg); }
+.theme-gray .cat-badge { background: var(--gray-bg); color: var(--gray-text); }
+
+/* Note inside category */
+.cat-note {
+  padding: 12px 24px;
+  background: var(--bg);
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.6;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.cat-note strong {
+  color: var(--text-2);
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 32px 0;
+  font-size: 12px;
+  color: var(--text-4);
+  border-top: 1px solid var(--border-light);
+  margin-top: 40px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.category {
+  animation: fadeIn 0.4s ease both;
+}
+
+.category:nth-child(2) { animation-delay: 0.05s; }
+.category:nth-child(3) { animation-delay: 0.1s; }
+.category:nth-child(4) { animation-delay: 0.15s; }
+.category:nth-child(5) { animation-delay: 0.2s; }
+.category:nth-child(6) { animation-delay: 0.25s; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .page { padding: 24px 16px 80px; }
+  .hero h1 { font-size: 28px; }
+  .stats-ribbon { grid-template-columns: repeat(2, 1fr); }
+  .task { padding: 12px 16px; }
+  .cat-header { padding: 14px 16px; }
+  .t-right { flex-direction: row; align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="hero">
+  <div class="hero-label">Command Center</div>
+  <h1>Zovo</h1>
+  <div class="date">Updated March 10, 2026</div>
+</div>
+
+<div class="stats-ribbon">
+  <div class="stat-pill"><div class="val">3,187</div><div class="label">DR97 Pages</div></div>
+  <div class="stat-pill"><div class="val">621+</div><div class="label">TSP Users</div></div>
+  <div class="stat-pill"><div class="val">16</div><div class="label">Extensions</div></div>
+  <div class="stat-pill"><div class="val">$0</div><div class="label">MRR</div></div>
+</div>
+
+<div class="global-progress">
+  <div class="bar-wrap"><div class="bar-fill" id="gFill" style="width:0%"></div></div>
+  <div class="bar-label" id="gLabel">0 / 0</div>
+</div>
+
+<!-- ===================== P1: TAB SUSPENDER ===================== -->
+<div class="category">
+  <div class="cat-card open theme-green" data-cat="tsp">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">1</div>
+      <div class="cat-info">
+        <div class="cat-title">Tab Suspender Pro</div>
+        <div class="cat-subtitle">QA, localization, Pro tier, payment, landing page</div>
+      </div>
+      <span class="cat-badge">P1</span>
+      <span class="cat-progress" data-counter="tsp"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note"><strong>621+ users, 200+/day organic, 4.97 stars.</strong> Growing fast without any promotion. Do not ship changes until QA is complete. Pro tier is the revenue unlock.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Full QA audit with browser-based Claude</div><div class="t-detail">Clean profile install, 30+ tabs, suspension, resume, whitelist, audio tabs, pinned tabs, tab groups, 100+ tab stress test, console errors, Chrome restart persistence, edge cases</div></div><div class="t-right"><span class="t-priority pri-critical">CRITICAL</span><span class="t-rating">10/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Verify CWS localization across 55 locales</div><div class="t-detail">Check all locales present, descriptions full-length not truncated. 200+ installs/day means every missing locale is lost international users.</div></div><div class="t-right"><span class="t-priority pri-critical">CRITICAL</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Build Pro tier features</div><div class="t-detail">Memory dashboard showing real-time RAM savings. Scheduled suspension via Alarms API. Whitelist sync via storage.sync. Session restore after crash. $3.99/month.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Stripe integration and payment flow</div><div class="t-detail">Create Stripe product, license key verification, chrome.storage, 72-hour offline grace. Test end-to-end 5 times on fresh profile.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Smart review prompt after 10 suspensions / 500MB saved</div><div class="t-detail">Trigger at the right moment of value. Subtle, not aggressive. Direct link to CWS review page. More reviews = better ranking = more installs.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Dedicated landing page on zovo.one/tab-suspender</div><div class="t-detail">Live memory counter, before/after animation, user count, pricing, CWS button with UTM. All 3,187 articles link here. Lovable credits. Converts better than raw CWS listing.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">9/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== P2: FLEET PIPELINE ===================== -->
+<div class="category">
+  <div class="cat-card theme-purple" data-cat="fleet">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">2</div>
+      <div class="cat-info">
+        <div class="cat-title">Fleet Pipeline</div>
+        <div class="cat-subtitle">GitHub SEO, page optimization, content production</div>
+      </div>
+      <span class="cat-badge">P2</span>
+      <span class="cat-progress" data-counter="fleet"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note"><strong>3,187 pages on DR97.</strong> Fleet runs 24/7. Target 5,000+ pages by end of week. Every page links to zovo.one. Google is crawling sitemaps.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Run fleet to 5,000+ total pages</div><div class="t-detail">1-2 more GitHub SEO runs on new niches. "Browser Performance Guide", "Web Extension Security Guide." 300-500 new DR97 pages each run.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-status st-fleet">FLEET</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Update all page footers with Tab Suspender CWS link</div><div class="t-detail">Every article footer: "Save 2GB+ RAM daily with Tab Suspender Pro." Direct CWS link. 3,187 pages funneling to one listing.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-status st-fleet">FLEET</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Add Open Graph social preview tags to all pages</div><div class="t-detail">og:title, og:description, og:image for every article. Branded preview card. Makes every social share show a professional card instead of blank link.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Add Schema markup (JSON-LD) to all pages</div><div class="t-detail">Article, FAQ, SoftwareApplication, HowTo schemas. Rich snippets increase Google CTR by 20-30%.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">8.5/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Build internal linking across all articles</div><div class="t-detail">Each article links to 3-5 related articles. Strengthens site structure. Passes authority between pages. Fleet-automatable scan and update.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-status st-fleet">FLEET</span><span class="t-rating">8.5/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Automate sitemap generation and search engine ping</div><div class="t-detail">Auto-regenerate sitemaps when new articles deploy. Ping Google and Bing. Fleet produces daily, sitemaps must stay current.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Fix 6 npm package repos on GitHub</div><div class="t-detail">Failing CI, missing READMEs, no descriptions. Every repo must look professional. Developers judge Zovo by GitHub appearance.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">7/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== P3: API DISTRIBUTION ===================== -->
+<div class="category">
+  <div class="cat-card theme-blue" data-cat="api">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">3</div>
+      <div class="cat-info">
+        <div class="cat-title">API Distribution</div>
+        <div class="cat-subtitle">Dev.to, Hashnode, Medium, GitHub Discussions</div>
+      </div>
+      <span class="cat-badge">P3</span>
+      <span class="cat-progress" data-counter="api"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note"><strong>Not started.</strong> Three platforms with publishing APIs. Premium articles only. Don't cross-post bulk content. Your real story is the best article.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Get API keys for Dev.to, Hashnode, Medium</div><div class="t-detail">Dev.to: settings/extensions. Hashnode: settings/developer + publication ID. Medium: security settings integration token. Store as environment variables.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Build cross-platform publish script</div><div class="t-detail">Input: markdown file. Output: published on Dev.to (REST), Hashnode (GraphQL), Medium (REST) with canonical URL to GitHub Pages version. One command, three platforms.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Write and publish "3,187 Pages in 4 Days" article</div><div class="t-detail">Your real story with real numbers. This is a 10K+ view Dev.to article. Not a generic guide. Your actual fleet architecture, agent count, production rate, quality audit. Publish via API.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">10/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Set up premium article pipeline in fleet</div><div class="t-detail">Separate tier from GitHub Pages volume. 5-10 per week. Longer, opinionated, real data. Fleet growth story, Tab Suspender case study, Chrome extension monetization insights.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-status st-fleet">FLEET</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">GitHub Discussions engagement</div><div class="t-detail">Monitor popular Chrome extension repos for questions in Discussions tab. Helpful answers with links to guide articles or packages. Permanent, Google-indexed.</div></div><div class="t-right"><span class="t-priority pri-low">LOW</span><span class="t-rating">7/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== P4: SEO / INDEXING ===================== -->
+<div class="category">
+  <div class="cat-card theme-orange" data-cat="seo">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">4</div>
+      <div class="cat-info">
+        <div class="cat-title">SEO and Indexing</div>
+        <div class="cat-subtitle">Search Console, DR tracking, geo pages</div>
+      </div>
+      <span class="cat-badge">P4</span>
+      <span class="cat-progress" data-counter="seo"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note"><strong>Sitemaps submitted, Google crawling.</strong> Check indexing around March 13-15. DR movement takes 2-4 weeks to appear in tools.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Check Search Console indexing (March 13-15)</div><div class="t-detail">site:theluckystrike.github.io in Google. Search Console indexed count, impressions, clicks. Screenshot for case study.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-status st-wait">WAIT 3-5 DAYS</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Baseline zovo.one DR and track weekly</div><div class="t-detail">Ahrefs free checker or similar. Current DR unknown. Set baseline now, recheck every Monday.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Build hreflang geo-targeted landing pages</div><div class="t-detail">Top 10 countries by installs get localized pages. /tab-suspender/ja, /de, /pt-br. Local language, local search queries. Lovable credits.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">9/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Add pricing to GitHub SEO service page</div><div class="t-detail">$4,999 with real data proof. "3,187 pages in 4 days." Position against $50K agencies. Wait for Search Console screenshots.</div></div><div class="t-right"><span class="t-priority pri-low">LOW</span><span class="t-status st-after">AFTER DATA</span><span class="t-rating">8/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== P5: CWS PORTFOLIO ===================== -->
+<div class="category">
+  <div class="cat-card theme-cyan" data-cat="cws">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">5</div>
+      <div class="cat-info">
+        <div class="cat-title">CWS Portfolio</div>
+        <div class="cat-subtitle">Localization, BoldTake removal, cross-promotion</div>
+      </div>
+      <span class="cat-badge">P5</span>
+      <span class="cat-progress" data-counter="cws"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note"><strong>16 extensions live.</strong> 2 pending localization. BoldTake needs removal. Cross-promotion system connects the portfolio.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Complete localization for 2 pending extensions</div><div class="t-detail">55-locale translations for both. Verify full-length descriptions.</div></div><div class="t-right"><span class="t-priority pri-high">HIGH</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Unpublish BoldTake from CWS</div><div class="t-detail">X auto-reply violates TOS. 36 users not worth the brand risk. Keep boldtake.io redirect for SEO.</div></div><div class="t-right"><span class="t-priority pri-medium">MEDIUM</span><span class="t-rating">7/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Build cross-promotion in all extension popups</div><div class="t-detail">"Also from Zovo" panel. Tab Suspender users discover BeLikeNative. Every install becomes a discovery channel.</div></div><div class="t-right"><span class="t-priority pri-low">LOW</span><span class="t-rating">7.5/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== BACKLOG ===================== -->
+<div class="category">
+  <div class="cat-card theme-gray" data-cat="backlog">
+    <div class="cat-header" onclick="toggle(this)">
+      <div class="cat-icon">~</div>
+      <div class="cat-info">
+        <div class="cat-title">Backlog</div>
+        <div class="cat-subtitle">Ideas parked until P1-P3 are complete</div>
+      </div>
+      <span class="cat-badge">LATER</span>
+      <span class="cat-progress" data-counter="backlog"></span>
+      <span class="cat-chevron">&#8250;</span>
+    </div>
+    <div class="task-list">
+      <div class="cat-note">Nothing here gets worked on until Priority 1-3 tasks are done.</div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">UGC before/after RAM videos</div><div class="t-detail">YouTube Shorts, TikTok. Requires recording, not fleet-automatable.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Chrome Extension Weekly newsletter</div><div class="t-detail">Only newsletter in the niche. Build after 5K+ TSP users and 500+ email subscribers.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">8/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Second GitHub SEO case study (non-Chrome niche)</div><div class="t-detail">Prove the service works across domains. Wait for first case study data.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">7/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">TrustCheck Pro (fake review checker)</div><div class="t-detail">Category vacant. Build after TSP revenue is proven.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">7/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">AMP mobile version of consumer articles</div><div class="t-detail">Higher mobile search ranking. Complex at 1,609 articles.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">7/10</span></div></div>
+
+      <div class="task"><input type="checkbox" onchange="save()"><div class="t-content"><div class="t-title">Perplexity Computer subscription</div><div class="t-detail">$200/month for competitor intelligence. Not worth it until $3K+ MRR.</div></div><div class="t-right"><span class="t-priority pri-low">LATER</span><span class="t-rating">4/10</span></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Zovo Command Center. Focus on P1-P3. Everything else waits.
+</div>
+
+</div>
+
+<script>
+function toggle(header) {
+  header.closest('.cat-card').classList.toggle('open');
+}
+
+function save() {
+  const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+  localStorage.setItem('zovo_cc_v2', JSON.stringify(boxes.map(b => b.checked)));
+  render();
+}
+
+function render() {
+  const boxes = [...document.querySelectorAll('input[type="checkbox"]')];
+  const total = boxes.length;
+  const done = boxes.filter(b => b.checked).length;
+  const pct = Math.round((done / total) * 100);
+
+  document.getElementById('gFill').style.width = pct + '%';
+  document.getElementById('gLabel').textContent = done + ' / ' + total;
+
+  boxes.forEach(b => {
+    const t = b.closest('.task');
+    b.checked ? t.classList.add('checked') : t.classList.remove('checked');
+  });
+
+  document.querySelectorAll('.cat-card').forEach(card => {
+    const cb = [...card.querySelectorAll('input[type="checkbox"]')];
+    const d = cb.filter(b => b.checked).length;
+    const counter = card.querySelector('[data-counter]');
+    if (counter) counter.textContent = d + '/' + cb.length;
+  });
+}
+
+// Restore
+const s = JSON.parse(localStorage.getItem('zovo_cc_v2') || '[]');
+if (s.length) {
+  document.querySelectorAll('input[type="checkbox"]').forEach((b, i) => {
+    if (s[i]) b.checked = true;
+  });
+}
+render();
+</script>
+</body>
+</html>
